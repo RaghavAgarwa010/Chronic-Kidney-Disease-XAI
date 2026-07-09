@@ -46,3 +46,25 @@ LIME (Local Interpretable Model-agnostic Explanations) builds a localized linear
 git clone [https://github.com/RaghavAgarwa010/Chronic-Kidney-Disease-XAI.git](https://github.com/RaghavAgarwa010/Chronic-Kidney-Disease-XAI.git)
 cd Chronic-Kidney-Disease-XAI
 pip install -r requirements.txt
+
+from src.data_pipeline import CKDDataPipeline
+from src.feature_engineering import select_features
+from src.train import train_and_evaluate
+from src.interpretability import generate_shap_explanations, generate_lime_explanation
+
+# Initialize data flow (Specify your local data path)
+pipeline = CKDDataPipeline('data/chronic_kidney_disease.arff')
+df = pipeline.load_and_clean()
+X_train, X_test, y_train, y_test = pipeline.preprocess(df)
+
+# Feature selection via RFE
+top_features = select_features(X_train, y_train, n_features=12)
+X_train_sel, X_test_sel = X_train[top_features], X_test[top_features]
+
+# Training & Cross Validation
+metrics = train_and_evaluate(X_train_sel, y_train, X_test_sel, y_test)
+print(f"XGBoost Mean CV F1: {metrics['XGBoost']['cv_f1_mean']:.4f}")
+
+# Generate Explainability Objects
+xgb_model = metrics['XGBoost']['model']
+explainer, shap_vals = generate_shap_explanations(xgb_model, X_train_sel, X_test_sel)
