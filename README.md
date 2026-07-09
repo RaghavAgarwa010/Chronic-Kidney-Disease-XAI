@@ -41,8 +41,6 @@ LIME (Local Interpretable Model-agnostic Explanations) builds a localized linear
 
 ## 🚀 How to Run the Pipeline
 
-### 1. Clone the repository and setup dependencies
-```bash
 git clone [https://github.com/RaghavAgarwa010/Chronic-Kidney-Disease-XAI.git](https://github.com/RaghavAgarwa010/Chronic-Kidney-Disease-XAI.git)
 cd Chronic-Kidney-Disease-XAI
 pip install -r requirements.txt
